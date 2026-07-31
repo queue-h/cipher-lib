@@ -7,7 +7,7 @@ class keyword_substitution_encode():
         self.keyword = keyword.upper()
         self.plaintext = plaintext.upper()
         self.cipher_alphabet = self.get_cipher_alphabet()
-        self.ciphertext = self.encode
+        self.ciphertext = self.encode()
 
     def get_cipher_alphabet(self):
         alpha_copy = self.alphabet.copy()
@@ -30,9 +30,25 @@ class keyword_substitution_encode():
 
         return cipher_alphabet
 
+    # returns ciphertext that gets held in self.ciphertext
     def encode(self):
-        pass
+        plaintext_arr = list(self.plaintext)
+        ciphertext = ""
+
+        # match plaintext with ciphertext
+        for x in range(len(plaintext_arr)):
+            char = plaintext_arr[x]
+            if char in self.alphabet:
+                plaintext_index = self.alphabet.index(char)
+                plaintext_arr[x] = self.cipher_alphabet[plaintext_index]
+
+        return "".join(plaintext_arr)
+
+class keyword_substitution_decode():
+    alphabet = list(string.ascii_uppercase)
+
 
 if __name__ == "__main__":
     encode = keyword_substitution_encode("ciphercipher", "hello world")
     print(encode.cipher_alphabet)
+    print(encode.ciphertext)

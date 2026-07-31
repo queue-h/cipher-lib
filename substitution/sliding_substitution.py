@@ -1,6 +1,6 @@
 import string
 
-class substitution_encode():
+class sliding_substitution_encode():
 
     alphabet = list(string.ascii_uppercase)
 
@@ -19,7 +19,7 @@ class substitution_encode():
                 text_arr[x] = self.alphabet[ciphertext_index]
         return ''.join(text_arr)
 
-class substitution_decode():
+class sliding_substitution_decode():
     # really best not to think of this as plaintext for this one
     alphabet = list(string.ascii_uppercase)
 
@@ -40,5 +40,5 @@ class substitution_decode():
 
 
 if __name__ == '__main__':
-    encode = substitution_encode(97, "hello world!")
+    encode = sliding_substitution_encode(97, "hello world!")
     print(encode.ciphertext)
