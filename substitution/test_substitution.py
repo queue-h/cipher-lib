@@ -68,29 +68,38 @@ class test_sliding_substitution_decode(unittest.TestCase):
         decode = sliding_substitution_decode(97, ciphertext)
         assert decode.plaintext == self.expected_plaintext
 
-class test_keyword_substitution_encode(unittest.TestCase):
-    plaintext = "hello world!"
+class test_keyword_substitution_alphabet(unittest.TestCase):
     keyword = "cipher"
-
     def test_cipher_alphabet(self):
         expected_alphabet = ['C', 'I', 'P', 'H', 'E', 'R', 'A', 'B', 'D', 'F', 'G', 'J', 'K', 'L', 'M', 'N', 'O', 'Q', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-        encode = keyword_substitution_encode(self.keyword, self.plaintext)
+        encode = keyword_substitution_encode(self.keyword, "")
         assert encode.cipher_alphabet == expected_alphabet
 
     def test_cipher_alphabet_duplicates(self):
         expected_alphabet = ['C', 'I', 'P', 'H', 'E', 'R', 'A', 'B', 'D', 'F', 'G', 'J', 'K', 'L', 'M', 'N', 'O', 'Q', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-        encode = keyword_substitution_encode(self.keyword + self.keyword, self.plaintext) # use keyword twice for duplicates bc why not
+        encode = keyword_substitution_encode(self.keyword + self.keyword, "") # use keyword twice for duplicates bc why not
         assert encode.cipher_alphabet == expected_alphabet
 
     def test_cipher_alphabet_none(self):
         expected_alphabet = list(string.ascii_uppercase)
-        encode = keyword_substitution_encode("", self.plaintext)
+        encode = keyword_substitution_encode("", "")
         assert encode.cipher_alphabet == expected_alphabet
 
+class test_keyword_substitution_encode(unittest.TestCase):
+    plaintext = "hello world!"
+    keyword = "cipher"
+    expected_ciphertext = "BEJJM WMQJH!"
+
     def test_encode(self):
-        expected_ciphertext = "BEJJM WMQJH!"
         encode = keyword_substitution_encode(self.keyword, self.plaintext)
-        assert encode.ciphertext == expected_ciphertext
+        assert encode.ciphertext == self.expected_ciphertext
 
 class test_keyword_substitution_decode(unittest.TestCase):
-    pass
+    keyword = "cipher"
+    ciphertext = "BEJJM WMQJH!"
+    expected_plaintext = "HELLO WORLD!"
+
+    def test_decode(self):
+        decode = keyword_substitution_decode(self.keyword, self.ciphertext)
+        assert decode.plaintext == self.expected_plaintext
+
