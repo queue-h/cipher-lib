@@ -24,6 +24,17 @@ def get_cipher_alphabet(keyword):
     return cipher_alphabet
 
 class keyword_substitution_encode():
+    """
+    Takes in a keyword to shuffle the alphabet and encodes the plaintext based on the ciphered alphabet.
+
+    :param keyword: The keyword used to shuffle the alphabet.
+    :type keyword: str
+    :param plaintext: The plaintext to be encoded.
+    :type plaintext: str
+    :return: None. Use self.ciphertext to access the encoded plaintext.
+    :rtype: None
+    """
+
     def __init__(self, keyword, plaintext):
         self.keyword = keyword.upper()
         self.plaintext = plaintext.upper()
@@ -44,6 +55,17 @@ class keyword_substitution_encode():
         return "".join(text_arr)
 
 class keyword_substitution_decode():
+    """
+    Takes in a keyword to shuffle the alphabet and decodes the ciphertext based on the ciphered alphabet. This is the
+    inverse to keyword_substitution_encode.
+
+    :param keyword: The keyword used to shuffle the alphabet.
+    :type keyword: str
+    :param ciphertext: The ciphertext to be decoded.
+    :type ciphertext: str
+    :return: None. Use self.plaintext to access the decoded ciphertext.
+    :rtype: None
+    """
 
     def __init__(self, keyword, ciphertext):
         self.keyword = keyword.upper()
@@ -62,9 +84,6 @@ class keyword_substitution_decode():
                 text_arr[x] = alphabet[ciphertext_index]
 
         return "".join(text_arr)
-
-
-
 
 
 

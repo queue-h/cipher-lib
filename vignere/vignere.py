@@ -5,6 +5,14 @@ alphabet = list(string.ascii_uppercase)
 
 
 def get_keyword_arr(keyword, text):
+    """
+    Helper method to create the string of repeating keywords in the punctuation of the plaintext.
+
+    :param keyword: The keyword to added to the arr
+    :param text: The plaintext that serves as the basis for the array (for punctuation purposes)
+    :return: the desired array
+    :rtype: str list
+    """
     keyword_arr = list(text)
 
     for index in range(len(keyword_arr)):
@@ -16,14 +24,24 @@ def get_keyword_arr(keyword, text):
     return keyword_arr
 
 class vignere_basic_encode():
+    """
+    This class takes in a plaintext and keyword and uses a standard Vignere tableau to encode it. The __init__ function
+    automatically creates and fills the paramaters to be accessed as needed.
+
+    :param plaintext: The plaintext to be encoded
+    :type plaintext: str
+    :param keyword: The keyword to encode with
+    :type keyword: str
+    :returns: None
+    :rtype: None
+    """
 
     tableau = tableau()
 
     def __init__(self, plaintext, keyword):
-
         self.plaintext = plaintext.upper()
         self.keyword = keyword.upper()
-        self.basic_tableau = self.tableau.basic_tableau
+        self.basic_tableau = self.tableau.tableau
         self.keyword_arr = get_keyword_arr(self.keyword, self.plaintext)
         self.ciphertext = self.encode()
 
@@ -47,14 +65,24 @@ class vignere_basic_encode():
 
         return "".join(text_arr)
 
-
 class vignere_basic_decode():
+    """
+    This class takes in a ciphertext and keyword and uses a standard Vignere tableau to decode it. The __init__ function
+    automatically creates and fills the paramaters to be accessed as needed. This is the inverse of the vignere_basic_encode class.
+
+    :param ciphertext: The ciphertext to be encoded
+    :type ciphertext: str
+    :param keyword: The keyword to decode with
+    :type keyword: str
+    :returns: None
+    :rtype: None
+    """
     tableau = tableau()
 
     def __init__(self, ciphertext, keyword):
         self.ciphertext = ciphertext.upper()
         self.keyword = keyword.upper()
-        self.basic_tableau = self.tableau.basic_tableau
+        self.basic_tableau = self.tableau.tableau
         self.keyword_arr = get_keyword_arr(self.keyword, self.ciphertext)
         self.plaintext = self.decode()
 
@@ -76,13 +104,16 @@ class vignere_basic_decode():
                 text_arr[index] = alphabet[cipherletter_index]
         return "".join(text_arr)
 
+class vignere_autokey_decode():
+    pass
 
 
 if __name__ == "__main__":
-    print(vignere_basic_encode.tableau)
+    t = tableau("ciphertext")
+    print(t)
 
-    encode = vignere_basic_encode("hello world!", "abc")
+    encode = vignere_basic_encode("hello world!", "cipher")
     print(encode.ciphertext)
 
-    decode = vignere_basic_decode("HFNLP WPTLE!", "abc")
+    decode = vignere_basic_decode("JMASS YWGSH!", "cipher")
     print(decode.plaintext)

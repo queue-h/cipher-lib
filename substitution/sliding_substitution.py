@@ -1,10 +1,20 @@
 import string
 
 class sliding_substitution_encode():
+    """
+    Encodes plaintext in a Caesar cipher with a custom shift. Default is 3.
+
+    :param plaintext: The plaintext to be encoded.
+    :type plaintext: str
+    :param shift: The amount to shift the cipher alphabet.
+    :type shift: int
+    :return: None. Use self.ciphertext to access the encoded plaintext.
+    :rtype: None
+    """
 
     alphabet = list(string.ascii_uppercase)
 
-    def __init__(self, shift, plaintext):
+    def __init__(self, plaintext, shift = 3):
         self.shift = shift
         self.plaintext = plaintext.upper()
         self.ciphertext = self.encode()
@@ -20,10 +30,19 @@ class sliding_substitution_encode():
         return ''.join(text_arr)
 
 class sliding_substitution_decode():
-    # really best not to think of this as plaintext for this one
+    """
+    Decodes Caesar cipher ciphertext with a custom shift. Default is 3. This is the inverse to sliding_substitution_encode.
+
+    :param ciphertext: The ciphertext to be decoded.
+    :type ciphertext: str
+    :param shift: The amount to shift the cipher alphabet.
+    :type shift: int
+    :return: None. Use self.plaintext to access the decoded ciphertext.
+    :rtype: None
+    """
     alphabet = list(string.ascii_uppercase)
 
-    def __init__(self, shift, ciphertext):
+    def __init__(self, ciphertext, shift = 3):
         self.shift = shift
         self.ciphertext = ciphertext.upper()
         self.plaintext = self.decode()
