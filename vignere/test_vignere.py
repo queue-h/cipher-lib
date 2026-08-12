@@ -29,6 +29,9 @@ class test_tableu(unittest.TestCase):
                               ["Y", "Z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X"],
                               ["Z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y"]]
 
+
+    # TODO: Test keyword tableau (with special chars and duplicates)
+
     def test_basic_tableau(self):
         t = tableau()
         assert t.tableau == self.basic_tableau_expected

@@ -3,7 +3,8 @@ from tableau import tableau
 
 alphabet = list(string.ascii_uppercase)
 
-
+# holy shit there is an algorithm for this (of course there is)
+# TODO: hold my beer (decaf coffee)
 def get_keyword_arr(keyword, text):
     """
     Helper method to create the string of repeating keywords in the punctuation of the plaintext.

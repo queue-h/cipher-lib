@@ -3,8 +3,18 @@ import string
 alphabet = list(string.ascii_uppercase)
 
 def get_cipher_alphabet(keyword):
+    """
+    This will return a shuffled alphabet to encode and decode from. Non-alpha and duplicated characters are eliminated,
+    and everything is converted and returned in uppercase. For example: get_cipher_alphabet('foobar') will
+    return ['F', 'O', 'B', 'A', 'R', 'C', 'D', 'E', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+
+    :param keyword: The keyword used to shuffle the alphabet.
+    :type keyword: str
+    :return: Shuffled alphabet.
+    :rtype: list
+    """
     alpha_copy = alphabet.copy()
-    keyword_arr = list(keyword)
+    keyword_arr = list(keyword.upper())
 
     # remove chars in keyword
     for x in range(len(keyword)):
@@ -88,9 +98,4 @@ class keyword_substitution_decode():
 
 
 if __name__ == "__main__":
-    encode = keyword_substitution_encode("ciphercipher", "hello world")
-    print(encode.cipher_alphabet)
-    print(encode.ciphertext)
-
-    decode = keyword_substitution_decode("ciphercipher", "BEJJM WMQJH")
-    print(decode.plaintext)
+    print(get_cipher_alphabet('foobar'))

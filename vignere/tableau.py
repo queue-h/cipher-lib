@@ -18,6 +18,7 @@ class tableau():
         self.keyword = keyword.upper()
         self.tableau = self.get_tableau()
 
+    # TODO: Does this work?
     def get_tableau(self):
 
         # get_cipher_alphabet would still work with a blank keyword, but its faster to check
