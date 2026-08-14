@@ -5,26 +5,31 @@ alphabet = list(string.ascii_uppercase)
 
 # holy shit there is an algorithm for this (of course there is)
 # TODO: hold my beer (decaf coffee)
-def get_keyword_arr(keyword, text):
+def get_keyword_arr(message, keyword):
     """
     Helper method to create the string of repeating keywords in the punctuation of the plaintext.
 
+    :param message: The plaintext that serves as the basis for the array (for punctuation purposes)
     :param keyword: The keyword to added to the arr
-    :param text: The plaintext that serves as the basis for the array (for punctuation purposes)
     :return: the desired array
     :rtype: str list
     """
-    keyword_arr = list(text)
+    keyword_arr = []
 
-    for index in range(len(keyword_arr)):
+    keyword_index = 0 # to iterate over the keyword
+    for letter in message:
         # maintain punctuation
-        if keyword_arr[index] in alphabet:
-            keyword_index = index % len(keyword)
-            keyword_arr[index] = keyword[keyword_index]
+        if letter in alphabet:
+            keyword_letter = keyword[keyword_index % len(keyword)]
+        else:
+            keyword_letter = letter # add punctuation
+            keyword_index -= 1 # do not move forward in keyword
+        keyword_index += 1
+        keyword_arr.append(keyword_letter)
 
     return keyword_arr
 
-class vignere_basic_encode():
+class vignere_basic():
     """
     This class takes in a plaintext and keyword and uses a standard Vignere tableau to encode it. The __init__ function
     automatically creates and fills the paramaters to be accessed as needed.
@@ -33,38 +38,31 @@ class vignere_basic_encode():
     :type plaintext: str
     :param keyword: The keyword to encode with
     :type keyword: str
-    :returns: None
-    :rtype: None
     """
-
     tableau = tableau()
 
-    def __init__(self, plaintext, keyword):
-        self.plaintext = plaintext.upper()
+    def __init__(self, message, keyword):
+        self.message = message.upper()
         self.keyword = keyword.upper()
-        self.basic_tableau = self.tableau.tableau
-        self.keyword_arr = get_keyword_arr(self.keyword, self.plaintext)
-        self.ciphertext = self.encode()
-
 
     def encode(self):
-        text_arr = self.keyword_arr.copy()
+        ciphertext = []
+        key_arr = get_keyword_arr(self.message, self.keyword) # array to be mutated
 
-        for index in range(len(self.keyword_arr)):
-            keyletter = self.keyword_arr[index]
-            plainletter = self.plaintext[index]
+        # iterates over every letter that needs to be encrypted
+        for index in range(len(key_arr)):
+            plainletter = self.message[index]  # letter to be encoded
+            keyletter = key_arr[index] # keyword letter to shift by
 
-            if keyletter in alphabet: # preserve punctuation
+            if plainletter in alphabet: # preserve punctuation
+                # shift plainletter by the keyletter, mod, and then convert integer back to char
+                encoded_letter = alphabet[(alphabet.index(plainletter) + alphabet.index(keyletter)) % len(alphabet)]
+            else:
+                # add punctation
+                encoded_letter = plainletter
+            ciphertext.append(encoded_letter)
 
-                # get cipher alphabet
-                keyletter_index = alphabet.index(keyletter) # to match to vignere tableau, since the first col is alphabetical
-                cipher_alphabet = self.basic_tableau[keyletter_index]
-
-                # encode letter
-                plainletter_index = alphabet.index(plainletter)
-                text_arr[index] = cipher_alphabet[plainletter_index]
-
-        return "".join(text_arr)
+        return "".join(ciphertext)
 
 class vignere_basic_decode():
     """
@@ -110,11 +108,5 @@ class vignere_autokey_decode():
 
 
 if __name__ == "__main__":
-    t = tableau("ciphertext")
-    print(t)
-
-    encode = vignere_basic_encode("hello world!", "cipher")
-    print(encode.ciphertext)
-
-    decode = vignere_basic_decode("JMASS YWGSH!", "cipher")
-    print(decode.plaintext)
+    vignere = vignere_basic("the the is a message", "key")
+    print(vignere.encode())
