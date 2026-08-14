@@ -1,11 +1,7 @@
+from substitution.keyword_substitution import get_cipher_alphabet
 import string
-from tableau import tableau
 
-alphabet = list(string.ascii_uppercase)
-
-# holy shit there is an algorithm for this (of course there is)
-# TODO: hold my beer (decaf coffee)
-def get_keyword_arr(message, keyword):
+def get_keyword_arr(message, keyword, alphabet):
     """
     Helper method to create the string of repeating keywords in the punctuation of the plaintext.
 
@@ -29,84 +25,87 @@ def get_keyword_arr(message, keyword):
 
     return keyword_arr
 
-class vignere_basic():
+class vignere():
     """
-    This class takes in a plaintext and keyword and uses a standard Vignere tableau to encode it. The __init__ function
-    automatically creates and fills the paramaters to be accessed as needed.
+    This class takes in a message and a keyword and uses a standard Vignere tableau to encode and decode it.
+    Everything is returned in uppercase, punctuation and special characters are retained.
 
-    :param plaintext: The plaintext to be encoded
-    :type plaintext: str
-    :param keyword: The keyword to encode with
+    :param message: The text to be encoded and decoded (case-insensitive)
+    :type message: str
+    :param keyword: The keyword to encode and decode with (case-insensitive)
     :type keyword: str
+    :param alphabet_shuffle: An optional keyword to shuffle the alphabet using subsitution.keyword_substitution.get_cipher_alphabet(). Defaults to "".
+    :type alphabet_shuffle: str
     """
-    tableau = tableau()
 
-    def __init__(self, message, keyword):
+    def __init__(self, message, keyword, alphabet_shuffle = ""):
         self.message = message.upper()
         self.keyword = keyword.upper()
 
+        self.alphabet = list(string.ascii_uppercase)
+        # get_cipher_alphabet will still work with an empty keyword, but for effiency:
+        if alphabet_shuffle.upper() != "":
+            self.alphabet = get_cipher_alphabet(alphabet_shuffle.upper())
+
+        self.key_arr = get_keyword_arr(self.message, self.keyword, self.alphabet)
+
+
     def encode(self):
+        """
+        Uses self.keyword to encode self.message using the basic Vignere tableau.
+        Convert alphabet to integer indexes, then E\\ :sub:`i` \\ = (P\\ :sub:`i` \\ + K\\ :sub:`i` \\) mod 26.
+        This is the inverse of self.decode().
+
+        :returns: The encoded message
+        :rtype: str
+        """
         ciphertext = []
-        key_arr = get_keyword_arr(self.message, self.keyword) # array to be mutated
 
         # iterates over every letter that needs to be encrypted
-        for index in range(len(key_arr)):
+        for index in range(len(self.message)):
             plainletter = self.message[index]  # letter to be encoded
-            keyletter = key_arr[index] # keyword letter to shift by
+            keyletter = self.key_arr[index] # keyword letter to shift by
 
-            if plainletter in alphabet: # preserve punctuation
+            if plainletter in self.alphabet: # preserve punctuation
                 # shift plainletter by the keyletter, mod, and then convert integer back to char
-                encoded_letter = alphabet[(alphabet.index(plainletter) + alphabet.index(keyletter)) % len(alphabet)]
-            else:
-                # add punctation
+                encoded_letter = self.alphabet[(self.alphabet.index(plainletter) + self.alphabet.index(keyletter)) % len(self.alphabet)]
+            else: # add punctation
                 encoded_letter = plainletter
             ciphertext.append(encoded_letter)
 
         return "".join(ciphertext)
 
-class vignere_basic_decode():
-    """
-    This class takes in a ciphertext and keyword and uses a standard Vignere tableau to decode it. The __init__ function
-    automatically creates and fills the paramaters to be accessed as needed. This is the inverse of the vignere_basic_encode class.
-
-    :param ciphertext: The ciphertext to be encoded
-    :type ciphertext: str
-    :param keyword: The keyword to decode with
-    :type keyword: str
-    :returns: None
-    :rtype: None
-    """
-    tableau = tableau()
-
-    def __init__(self, ciphertext, keyword):
-        self.ciphertext = ciphertext.upper()
-        self.keyword = keyword.upper()
-        self.basic_tableau = self.tableau.tableau
-        self.keyword_arr = get_keyword_arr(self.keyword, self.ciphertext)
-        self.plaintext = self.decode()
-
     def decode(self):
-        text_arr = self.keyword_arr.copy()
+        """
+        Uses self.keyword to decode self.message using the basic Vignere tableau.
+        Convert alphabet to integer indexes, then E\\ :sub:`i` \\ = (P\\ :sub:`i` \\ - K\\ :sub:`i` \\) mod 26.
+        This is the inverse of self.encode().
 
-        for index in range(len(self.keyword_arr)):
-            keyletter = self.keyword_arr[index]
-            cipherletter = self.ciphertext[index]
+        :returns: The decoded message
+        :rtype: str
+        """
+        plaintext = []
 
-            if keyletter in alphabet: # preserve punctuation
+        # iterate over every letter that need to be decrypted
+        for index in range(len(self.message)):
+            cipherletter = self.message[index] # letter to be decoded
+            keyletter = self.key_arr[index] # keyword letter to shift by
 
-                # get cipher alphabet
-                keyletter_index = alphabet.index(keyletter) # to match to vignere tableau, since the first col is alphabetical
-                cipher_alphabet = self.basic_tableau[keyletter_index]
+            if cipherletter in self.alphabet: # preserver punctuation
+                # shift cipherletter by keyletter (subtract instead of add), mod, and then convert interger back to char
+                decoded_letter = self.alphabet[(self.alphabet.index(cipherletter) - self.alphabet.index(keyletter)) % len(self.alphabet)]
+            else: # add punctuation
+                decoded_letter = cipherletter
+            plaintext.append(decoded_letter)
 
-                # decode
-                cipherletter_index = cipher_alphabet.index(cipherletter)
-                text_arr[index] = alphabet[cipherletter_index]
-        return "".join(text_arr)
+        return "".join(plaintext)
 
+# TODO: write this
 class vignere_autokey_decode():
     pass
 
 
 if __name__ == "__main__":
-    vignere = vignere_basic("the the is a message", "key")
-    print(vignere.encode())
+    print(vignere("this is a message!", "key").encode())
+    print(vignere("DLGC MQ K .QCCWYQI", "key").decode())
+    print(vignere("this is a message!", "key", "cipher").encode())
