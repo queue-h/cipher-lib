@@ -25,7 +25,7 @@ def get_keyword_arr(message, keyword, alphabet):
 
     return keyword_arr
 
-class vignere():
+class Vignere:
     """
     This class takes in a message and a keyword and uses a standard Vignere tableau to encode and decode it.
     Everything is returned in uppercase, punctuation and special characters are retained.
@@ -101,11 +101,11 @@ class vignere():
         return "".join(plaintext)
 
 # TODO: write this
-class vignere_autokey_decode():
+class VignereAutokey:
     pass
 
 
 if __name__ == "__main__":
-    print(vignere("this is a message!", "key").encode())
-    print(vignere("DLGC MQ K .QCCWYQI", "key").decode())
-    print(vignere("this is a message!", "key", "cipher").encode())
+    print(Vignere("this is a message!", "key").encode())
+    print(Vignere("DLGC MQ K .QCCWYQI", "key").decode())
+    print(Vignere("this is a message!", "key", "cipher").encode())
